@@ -16,6 +16,9 @@ RSpec.describe MinHeap do
 			expect(heap).to respond_to(:extract_min)
 		end
 
+		it "responds to decrease_priority" do
+			expect(heap).to respond_to(:decrease_priority)
+		end
 	end
 
 	context "acts as min-heap" do
@@ -57,6 +60,16 @@ RSpec.describe MinHeap do
 			expect(heap.size).to eq 0
 			heap.extract_min
 			expect(heap.size).to eq 0
+		end
+
+		it "decrease_priority correctly" do
+			h = MinHeap.new([16,15,14,13])
+			h.decrease_priority(16, 5)
+			expect(h.extract_min).to eq 5
+			expect(h.extract_min).to eq 13
+			expect(h.extract_min).to eq 14
+			expect(h.extract_min).to eq 15
+			expect(h.extract_min).to eq nil
 		end
 	end
 
