@@ -37,6 +37,19 @@ class MinHeap
     elem
   end
 
+  def decrease_priority(elem, new_elem)
+    i = find_index_of(elem)
+    last_i = last_busy_position
+    heap[i] = heap[last_i]
+    heap[last_i] = nil
+    @size -=1
+    sift_down(i)
+    i = first_empty_position
+    heap[i] = new_elem
+    sift_up(i)
+    @size +=1
+  end
+
   private
 
   def sift_up(index)
@@ -51,8 +64,8 @@ class MinHeap
   end
 
   def sift_down(index)
-    child_index1 = 2 * index + 1
-    child_index2 = 2 * index + 2
+    child_index1 = child1_index(index)
+    child_index2 = child2_index(index)
 
     child_index_to_compare = lesser_elem_index(child_index1, child_index2)
 
@@ -74,6 +87,35 @@ class MinHeap
     tmp          = heap[index1]
     heap[index1] = heap[index2]
     heap[index2] = tmp
+  end
+
+  def find_index_of(elem)
+    _find_index_of(elem, root_index)
+  end
+
+  def _find_index_of(elem, index)
+    found_index = nil
+    return index if heap[index] == elem
+
+    child_index1 = child1_index(index)
+    child_index2 = child2_index(index)
+
+    if heap[child_index1] != nil and heap[child_index1] <= elem
+      found_index = _find_index_of(elem, child_index1)
+    end
+
+    if heap[child_index2] != nil and heap[child_index2] <= elem and found_index.nil?
+      found_index = _find_index_of(elem, child_index2)
+    end
+    found_index
+  end
+
+  def child1_index(index)
+    2 * index + 1
+  end
+
+  def child2_index(index)
+    2 * index + 2
   end
 
   def first_empty_position
